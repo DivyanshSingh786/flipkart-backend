@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.server.js",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "./src/(.*)",
+      "dest": "index.server.js"
+    }
+  ]
+}
