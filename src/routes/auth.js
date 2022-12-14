@@ -3,6 +3,8 @@ const { signup, signin } = require('../controller/auth');
 const { validateSignupRequest, isRequestValidated, validateSigninRequest } = require('../validators/auth');
 const router = express.Router();
 
+router.get('/', (req,res)=>{return res.status(200).json({"msg":"server is working"})});
+
 router.post('/signup', validateSignupRequest, isRequestValidated, signup);
 
 router.post('/signin', validateSigninRequest, isRequestValidated, signin);
