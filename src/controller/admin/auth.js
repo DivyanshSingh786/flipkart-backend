@@ -1,6 +1,6 @@
 const User = require('../../models/user.js');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const shortid = require('shortid');
 
 
