@@ -18,7 +18,7 @@ async function createCategories(categories, parentId = null){
       slug: cate.slug,
       parentId: cate.parentId,
       type: cate.type,
-      children: createCategories(categories, cate._id)
+      children: await createCategories(categories, cate._id)
     });
   }
   return categoryList;
