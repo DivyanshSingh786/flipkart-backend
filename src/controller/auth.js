@@ -1,6 +1,6 @@
 const User = require('../models/user.js');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcrypt');
 const shortid = require('shortid');
 
 const generateJwtToken = (_id, role) => {
@@ -9,8 +9,8 @@ const generateJwtToken = (_id, role) => {
   });
 };
 
-exports.signup = (req, res) => {
-  User.findOne({ email: req.body.email })
+exports.signup = async(req, res) => {
+  await User.findOne({ email: req.body.email })
     .exec( async (error, user) => {
       if (user) return res.status(400).json({
         message: "User already registered"
@@ -22,7 +22,7 @@ exports.signup = (req, res) => {
         email,
         password
       } = req.body;
-      const hash_password = await bcrypt.hash(password, '$2b$10$WS5KNEDb4orheEFQfOSl9u');
+      const hash_password = password;
       const _user = new User({
         firstName,
         lastName,
@@ -31,7 +31,7 @@ exports.signup = (req, res) => {
         username: shortid.generate()
       });
 
-      _user.save((error, user) => {
+      await _user.save((error, user) => {
         if (error) {
           return res.status(400).json({
             massage: 'Something went wrong'
@@ -49,13 +49,13 @@ exports.signup = (req, res) => {
     });
 }
 
-exports.signin = (req, res) => {
-  User.findOne({ email: req.body.email })
+exports.signin = async(req, res) => {
+  await User.findOne({ email: req.body.email })
     .exec(async (error, user) => {
       if (error) return res.status(400).json({ error });
       if (user) {
-        const isPassword = await user.authenticate(req.body.password);
-        if (user.hash_password===isPassword && user.role === 'user') {
+        // const isPassword = await user.authenticate(req.body.password);
+        if (user.hash_password===req.body.password && user.role === 'user') {
           // const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
           const token = generateJwtToken(user._id, user.role);
           const { _id, firstName, lastName, email, role, fullName } = user;

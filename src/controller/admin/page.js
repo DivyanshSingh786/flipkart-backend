@@ -1,6 +1,6 @@
 const Page = require('../../models/page');
 
-exports.createPage = (req, res) => {
+exports.createPage = async(req, res) => {
   console.log(req.body);
   const { banners, products } = req.body;
   // return;
@@ -19,11 +19,11 @@ exports.createPage = (req, res) => {
 
   req.body.createdBy = req.user._id;
 
-  Page.findOne({ category: req.body.category })
-    .exec((error, page) => {
+  await Page.findOne({ category: req.body.category })
+    .exec(async(error, page) => {
       if (error) return res.status(400).json({ error });
       if (page) {
-        Page.findOneAndUpdate({ category: req.body.category }, req.body)
+        await Page.findOneAndUpdate({ category: req.body.category }, req.body)
           .exec((error, updatePage) => {
             if (error) return res.status(400).json({ error });
             if (updatePage) {
@@ -33,7 +33,7 @@ exports.createPage = (req, res) => {
       } else {
         const page = new Page(req.body);
 
-        page.save((error, page) => {
+        await page.save((error, page) => {
           if (error) return res.status(400).json({ error });
           if (page) {
             return res.status(201).json({ page });
@@ -43,10 +43,10 @@ exports.createPage = (req, res) => {
     })
 }
 
-exports.getPage = (req, res) => {
+exports.getPage = async(req, res) => {
   const { category, type } = req.params;
   if(type === "page"){
-    Page.findOne({ category: category })
+    await Page.findOne({ category: category })
     .exec((error, page) => {
       if(error) return res.status(400).json({error});
       if(page) return res.status(200).json({page});

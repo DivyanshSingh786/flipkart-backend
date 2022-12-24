@@ -1,12 +1,12 @@
 const User = require('../../models/user.js');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcrypt');
 const shortid = require('shortid');
 
 
-exports.signup = (req, res) => {
+exports.signup = async(req, res) => {
 
-  User.findOne({ email: req.body.email })
+  await User.findOne({ email: req.body.email })
     .exec( async (error, user) => {
       if (user) return res.status(400).json({
         message: "Admin already registered"
@@ -18,8 +18,8 @@ exports.signup = (req, res) => {
         email,
         password
       } = req.body;
-      const hash_password = await bcrypt.hash(password, '$2b$10$WS5KNEDb4orheEFQfOSl9u');
-//       const hash_password = password;
+      // const hash_password = await bcrypt.hash(password, '$2b$10$WS5KNEDb4orheEFQfOSl9u');
+      const hash_password = password;
       const _user = new User({
         firstName,
         lastName,
@@ -29,7 +29,7 @@ exports.signup = (req, res) => {
         role: 'admin'
       });
 
-      _user.save((error, data) => {
+      await _user.save((error, data) => {
         if (error) {
           return res.status(400).json({
             message: 'Something went wrong'
@@ -44,8 +44,8 @@ exports.signup = (req, res) => {
     })
 }
 
-exports.signin = (req, res) => {
-  User.findOne({ email: req.body.email })
+exports.signin = async(req, res) => {
+ await User.findOne({ email: req.body.email })
     .exec(async (error, user) => {
       if (error) return res.status(400).json({ error });
       if (user) {
@@ -69,7 +69,7 @@ exports.signin = (req, res) => {
     });
 }
 
-exports.signout = (req, res) => {
+exports.signout = async(req, res) => {
   res.clearCookie('token');
   res.status(200).json({message: 'Signout successfully...!'});
 }

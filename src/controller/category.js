@@ -3,7 +3,7 @@ const shortid = require('shortid');
 const slugify = require('slugify');
 
 
-function createCategories(categories, parentId = null){
+async function createCategories(categories, parentId = null){
   const categoryList = [];
   let category;
   if (parentId == null) {
@@ -25,7 +25,7 @@ function createCategories(categories, parentId = null){
 };
 
 
-exports.addCategory = (req, res) => {
+exports.addCategory = async(req, res) => {
 
   console.log(req.body);
   // return res.status(200).json({message: req.body});
@@ -42,7 +42,7 @@ exports.addCategory = (req, res) => {
   }
   console.log(categoryObj);
   const cat = new Category(categoryObj);
-  cat.save((error, category) => {
+  await cat.save((error, category) => {
     if (error) return res.status(400).json({ error });
     if (category) {
       return res.status(201).json({ category });
@@ -50,12 +50,12 @@ exports.addCategory = (req, res) => {
   });
 }
 
-exports.getCategory = (req, res) => {
-  Category.find({})
-  .exec((error, categories) => {
+exports.getCategory = async(req, res) => {
+  await Category.find({})
+  .exec(async(error, categories) => {
     if (error) return res.status(400).json({ error });
     if(categories){
-      const categoryList = createCategories(categories);
+      const categoryList = await createCategories(categories);
       res.status(200).json({ categoryList });
     }
   });

@@ -2,8 +2,8 @@ const Order = require("../models/order");
 const Cart = require("../models/cart");
 const Address = require("../models/address");
 
-exports.addOrder = (req, res) => {
-  Cart.deleteOne({ user: req.user._id }).exec((error, result) => {
+exports.addOrder = async(req, res) => {
+  await Cart.deleteOne({ user: req.user._id }).exec(async(error, result) => {
     if (error) return res.status(400).json({ error });
     if (result) {
       req.body.user = req.user._id;
@@ -27,7 +27,7 @@ exports.addOrder = (req, res) => {
         },
       ];
       const order = new Order(req.body);
-      order.save((error, order) => {
+      await order.save((error, order) => {
         if (error) return res.status(400).json({ error });
         if (order) {
           res.status(201).json({ order });
@@ -37,8 +37,8 @@ exports.addOrder = (req, res) => {
   });
 };
 
-exports.getOrders = (req, res) => {
-  Order.find({ user: req.user._id })
+exports.getOrders = async(req, res) => {
+  await Order.find({ user: req.user._id })
     .select("_id paymentStatus paymentType orderStatus items")
     .populate("items.productId", "_id name productPictures")
     .exec((error, orders) => {
@@ -49,18 +49,18 @@ exports.getOrders = (req, res) => {
     });
 };
 
-exports.getOrder = (req, res) => {
-  Order.findOne({ _id: req.body.orderId })
+exports.getOrder = async(req, res) => {
+  await Order.findOne({ _id: req.body.orderId })
     .populate("items.productId", "_id name productPictures")
     .lean()
-    .exec((error, order) => {
+    .exec(async(error, order) => {
       if (error) return res.status(400).json({ error });
       if (order) {
-        Address.findOne({
+        await Address.findOne({
           user: req.user._id,
-        }).exec((error, address) => {
+        }).exec(async(error, address) => {
           if (error) return res.status(400).json({ error });
-          order.address = address.address.find(
+          order.address = await address.address.find(
             (adr) => adr._id.toString() == order.addressId.toString()
           );
           res.status(200).json({
