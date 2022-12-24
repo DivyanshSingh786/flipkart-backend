@@ -50,7 +50,7 @@ exports.signin = async(req, res) => {
       if (error) return res.status(400).json({ error });
       if (user) {
         const isPassword = await user.authenticate(req.body.password);
-        if (user.hash_password===isPassword && user.role === 'admin') {
+        if (isPassword && user.role === 'admin') {
           const token = await jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
           const { _id, firstName, lastName, email, role, fullName } = user;
           res.cookie('token', token, {expiresIn: '1d'});
