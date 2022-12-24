@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 
 const userSchema = new mongoose.Schema({
@@ -49,10 +49,10 @@ const userSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-// userSchema.virtual('password')
-//   .set(function (password) {
-//     this.hash_password = bcrypt.hashSync(password, '$2b$10$WS5KNEDb4orheEFQfOSl9u');
-//   });
+userSchema.virtual('password')
+  .set(function (password) {
+    this.hash_password = bcrypt.hashSync(password, '$2b$10$WS5KNEDb4orheEFQfOSl9u');
+  });
 
 userSchema.virtual('fullName')
   .get(function (password) {
