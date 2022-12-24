@@ -2,9 +2,10 @@
   "name": "ecommerce-back-end",
   "version": "1.0.0",
   "description": "This is the backend of ecommerce flipkart clone project",
-  "main": "index.server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node index.server.js"  },
+    "start": "nodemon index.server.js"
+  },
   "keywords": [
     "ecommerce",
     "mern",
@@ -16,13 +17,13 @@
   "author": "Divyansh Singh",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
-    "node":"^16.15.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.27",
     "multer": "^1.4.5-lts.1",

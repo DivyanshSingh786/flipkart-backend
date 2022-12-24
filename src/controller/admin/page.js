@@ -1,16 +1,18 @@
 const Page = require('../../models/page');
 
 exports.createPage = (req, res) => {
-  const { banners, products } = req.files;
+  console.log(req.body);
+  const { banners, products } = req.body;
+  // return;
   if (banners.length > 0) {
     req.body.banners = banners.map((banner, index) => ({
-      img: `/public/${banner.filename}`,
+      img: banner,
       navigateTo: `/bannerClicked?categoryId=${req.body.category}&type=${req.body.type}`
     }));
   }
   if (products.length > 0) {
     req.body.products = products.map((product, index) => ({
-      img: `/public/${product.filename}`,
+      img: product,
       navigateTo: `/productClicked?categoryId=${req.body.category}&type=${req.body.type}`
     }));
   }

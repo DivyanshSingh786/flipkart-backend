@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
   }
 })
 
-exports.upload = multer({ storage });
+// exports.upload = multer({ storage });
 
 exports.requireSignin = (req, res, next) => {
   if (req.headers.authorization) {

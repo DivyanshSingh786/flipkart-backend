@@ -1,6 +1,6 @@
 const User = require('../../models/user.js');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcrypt');
 const shortid = require('shortid');
 
 
@@ -18,7 +18,8 @@ exports.signup = (req, res) => {
         email,
         password
       } = req.body;
-      const hash_password = await bcrypt.hash(password, '$2b$10$WS5KNEDb4orheEFQfOSl9u');
+      // const hash_password = await bcrypt.hash(password, '$2b$10$WS5KNEDb4orheEFQfOSl9u');
+      const hash_password = password;
       const _user = new User({
         firstName,
         lastName,
@@ -48,8 +49,8 @@ exports.signin = (req, res) => {
     .exec(async (error, user) => {
       if (error) return res.status(400).json({ error });
       if (user) {
-        const isPassword = await user.authenticate(req.body.password);
-        if (isPassword && user.role === 'admin') {
+        // const isPassword = await user.authenticate(req.body.password);
+        if (user.hash_password===req.body.password && user.role === 'admin') {
           const token = jwt.sign({ _id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
           const { _id, firstName, lastName, email, role, fullName } = user;
           res.cookie('token', token, {expiresIn: '1d'});

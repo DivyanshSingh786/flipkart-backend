@@ -24,19 +24,23 @@ function createCategories(categories, parentId = null){
   return categoryList;
 };
 
+
 exports.addCategory = (req, res) => {
 
+  console.log(req.body);
+  // return res.status(200).json({message: req.body});
   const categoryObj = {
     name: req.body.name,
     slug: `${slugify(req.body.name)}-${shortid.generate()}`,
     createdBy: req.user._id,
   }
-  if(req.file){
-    categoryObj.categoryImage = "/public/"+req.file.filename;
+  if(req.body.categoryPicture){
+    categoryObj.categoryImage = req.body.categoryPicture[0];
   }
   if (req.body.parentId) {
     categoryObj.parentId = req.body.parentId;
   }
+  console.log(categoryObj);
   const cat = new Category(categoryObj);
   cat.save((error, category) => {
     if (error) return res.status(400).json({ error });

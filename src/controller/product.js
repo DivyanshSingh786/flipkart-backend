@@ -3,18 +3,24 @@ const shortId = require('shortid');
 const slugify = require('slugify');
 const Category = require('../models/category');
 
-exports.createProduct = (req, res) => {
+exports.createProduct = async(req, res) => {
+
+  console.log(req.body);
+  // return;
 
   const {
-    name, price, description, category, quantity, createdBy
+    name, price, description, category, quantity, productPicture
   } = req.body;
+  console.log(productPicture);
 
   let productPictures = [];
-  if (req.files.length > 0) {
-    productPictures = req.files.map((file) => {
-      return { img: file.filename };
+  if (productPicture.length > 0) {
+    productPictures = await productPicture.map((pic) => {
+      console.log(pic);
+      return { img: pic };
     })
   }
+  console.log(productPictures);
 
   const product = new Product({
     name: name,
@@ -30,7 +36,7 @@ exports.createProduct = (req, res) => {
   product.save(((error, product) => {
     if (error) return res.status(400).json({ error });
     if (product) {
-      res.status(201).json({ product, files: req.files });
+      res.status(201).json({ product });
     }
   }));
 };
