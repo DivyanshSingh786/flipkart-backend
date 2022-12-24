@@ -50,6 +50,7 @@ app.use('/api', pageRoutes);
 app.use('/api', addressRoutes);
 app.use('/api', orderRoutes);
 app.use('/api', adminOrderRoute);
+app.use('/',(req,res)=>{res.status(200).json("message":"Welcome to server...")});
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
