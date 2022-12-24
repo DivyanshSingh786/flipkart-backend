@@ -1,6 +1,6 @@
 const User = require('../../models/user.js');
 const jwt = require('jsonwebtoken');
-// const bcrypt = require('bcrypt');
+// const bcrypt = require('bcryptjs');
 const shortid = require('shortid');
 
 
@@ -18,8 +18,8 @@ exports.signup = (req, res) => {
         email,
         password
       } = req.body;
-      // const hash_password = await bcrypt.hash(password, '$2b$10$WS5KNEDb4orheEFQfOSl9u');
-      const hash_password = password;
+      const hash_password = await bcrypt.hash(password, '$2b$10$WS5KNEDb4orheEFQfOSl9u');
+//       const hash_password = password;
       const _user = new User({
         firstName,
         lastName,
